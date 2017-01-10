@@ -4,9 +4,9 @@ namespace BigF\Models;
 
 use Illuminate\Database\Capsule\Manager;
 
-class Komanda
+class Tiesnesis
 {
-    public $table = 'komanda';
+    public $table = 'tiesnesis';
 
     /**
      * @return \Illuminate\Database\Query\Builder
@@ -19,21 +19,21 @@ class Komanda
     }
 
     /**
-     * @param $team
+     * @param $referee
      * @return int
      */
-    public static function save($team)
+    public static function save($referee)
     {
         $model = self::prepare();
 
-        if ($model->where($team)->exists()) {
-            $teamId = $model->select('id')
-                ->where($team)
+        if ($model->where($referee)->exists()) {
+            $refereeId = $model->select('id')
+                ->where($referee)
                 ->value('id');
         } else {
-            $teamId = $model->insertGetId($team);
+            $refereeId = $model->insertGetId($referee);
         }
 
-        return $teamId;
+        return $refereeId;
     }
 }

@@ -3,13 +3,22 @@
 namespace BigF\Managers;
 
 use BigF\Models\Komanda;
+use BigF\Models\Tiesnesis;
 
 class Importer
 {
     public function __construct(array $data)
     {
         $teams = $this->getTeamData($data);
+        // Populates teams with their database ID's
         $teams = $this->saveTeamData($teams);
+
+        $referees = $this->getRefereeData($data);
+        $referees = $this->saveRefereeData($referees);
+
+        $game = $this->getGameData($data, $referees, $teams);
+        $game = $this->saveGameData($game);
+        die(dump($referees));
     }
 
     private function getGameData(array $data)
@@ -49,9 +58,50 @@ class Importer
     private function saveTeamData($teams)
     {
         foreach ($teams as &$team) {
-            $team['id'] = Komanda::save($team);
+            $team['id'] = Komanda::save($team['data']);
         }
 
         return $teams;
+    }
+
+    private function getRefereeData($data)
+    {
+        $referees = [
+            'main' => [],
+            'line' => [],
+        ];
+        foreach ($data['Spele']['T'] as $lineJudge)
+        {
+            $referees['line'][] = [
+                'data' => [
+                    'uzvards' => $lineJudge['Uzvards'],
+                    'vards' => $lineJudge['Vards']
+                ],
+                'raw' => $lineJudge,
+                'id' => 0
+            ];
+        }
+
+        $referees['main'] = [
+            'data' => [
+                'uzvards' => $data['Spele']['VT']['Uzvards'],
+                'vards' => $data['Spele']['VT']['Vards'],
+            ],
+            'raw' => $data['Spele']['VT'],
+            'id' => 0
+        ];
+
+        return $referees;
+    }
+
+    private function saveRefereeData($referees)
+    {
+        $referees['main']['id'] = Tiesnesis::save($referees['main']['data']);
+
+        foreach ($referees['line'] as &$lineJudge) {
+            $lineJudge['id'] = Tiesnesis::save($lineJudge['data']);
+        }
+
+        return $referees;
     }
 }
