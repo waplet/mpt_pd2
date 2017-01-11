@@ -120,3 +120,27 @@ CREATE TABLE IF NOT EXISTS `varti` (
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
+--
+
+ALTER TABLE `spele`
+	ADD COLUMN `skatitaji` INT(10) UNSIGNED NOT NULL;
+
+ALTER TABLE `varti`
+  ADD UNIQUE INDEX `laiks_sitiens_spele_key_komanda_key_speletajs_key` (`laiks`, `sitiens`, `spele_key`, `komanda_key`, `speletajs_key`);
+
+ALTER TABLE `piespele`
+  ADD COLUMN `laiks` TIME NOT NULL DEFAULT '0',
+  ADD UNIQUE INDEX `laiks_varti_key_speletajs_key` (`laiks`, `varti_key`, `speletajs_key`);
+
+CREATE TABLE `pamatsastavs` (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `spele_key` INT(10) UNSIGNED NOT NULL,
+  `speletajs_key` INT(10) UNSIGNED NOT NULL,
+  `komanda_key` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `spele_key_speletajs_key` (`spele_key`, `speletajs_key`)
+)
+  ENGINE=InnoDB
+;
+

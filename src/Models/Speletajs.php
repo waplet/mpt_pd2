@@ -4,9 +4,9 @@ namespace BigF\Models;
 
 use Illuminate\Database\Capsule\Manager;
 
-class Spele
+class Speletajs
 {
-    public $table = 'spele';
+    public $table = 'speletajs';
 
     /**
      * @return \Illuminate\Database\Query\Builder
@@ -18,23 +18,27 @@ class Spele
         return Manager::table($table);
     }
 
-    public static function save($game)
+    /**
+     * @param $player
+     * @return int
+     */
+    public static function save($player)
     {
         $model = self::prepare();
 
         $where = [
-            'laiks' => $game['laiks'],
-            'vieta' => $game['vieta'],
+            'nr' => $player['nr'],
+            'komanda_key' => $player['komanda_key']
         ];
 
         if ($model->where($where)->exists()) {
-            $gameId = $model->select('id')
+            $playerId = $model->select('id')
                 ->where($where)
                 ->value('id');
         } else {
-            $gameId = $model->insertGetId($game);
+            $playerId = $model->insertGetId($player);
         }
 
-        return $gameId;
+        return $playerId;
     }
 }
