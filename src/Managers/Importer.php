@@ -73,6 +73,10 @@ class Importer
             'id' => 0,
         ];
 
+        if (!array_key_exists('Spele', $data)) {
+            throw new \ErrorException('Game data not found');
+        }
+
         $gm = $data['Spele'];
         $game['data']['laiks'] = date('Y-m-d', strtotime($gm['Laiks']));
         $game['data']['skatitaji'] = $gm['Skatitaji'] ?: 0;
@@ -99,6 +103,11 @@ class Importer
         return $game;
     }
 
+    /**
+     * Mandatory
+     * @param $data
+     * @return array
+     */
     protected function getTeamData($data)
     {
         $teams = [];
@@ -123,6 +132,11 @@ class Importer
         return $teams;
     }
 
+    /**
+     * Mandatory
+     * @param $data
+     * @return array
+     */
     protected function getRefereeData($data)
     {
         $referees = [
@@ -164,6 +178,11 @@ class Importer
         return $referees;
     }
 
+    /**
+     * Mandatory
+     * @param $team
+     * @return array
+     */
     protected function getPlayerData($team)
     {
         $teamPlayers = $team['raw']['Speletaji']['Speletajs'];
@@ -198,9 +217,20 @@ class Importer
         return $teamPlayers;
     }
 
+    /**
+     * Optional
+     * @param $team
+     * @param $teamPlayers
+     * @param $gameId
+     * @return array
+     */
     protected function getFoulData($team, $teamPlayers, $gameId)
     {
         $fouls = [];
+
+        if (!array_key_exists('Sodi', $team['raw']) || !is_array($team['raw']['Sodi'])) {
+            return $fouls;
+        }
 
         $preFouls = $team['raw']['Sodi']['Sods'];
 
@@ -225,16 +255,6 @@ class Importer
         return $fouls;
     }
 
-    private function getPlayerId($playerNr, $teamPlayers)
-    {
-        $player = array_filter($teamPlayers, function ($player) use ($playerNr) {
-            return $player['data']['nr']  == $playerNr;
-        });
-        $player = array_pop($player);
-
-        return $player['id'];
-    }
-
     protected function saveFoulData($fouls)
     {
         foreach ($fouls as &$teamFouls) {
@@ -249,6 +269,10 @@ class Importer
     protected function getSubstitutionData($team, $teamPlayers, $gameId)
     {
         $substitutions = [];
+
+        if (!array_key_exists('Mainas', $team['raw']) || !is_array($team['raw']['Mainas'])) {
+            return $substitutions;
+        }
 
         $preSubstitutions = $team['raw']['Mainas']['Maina'];
 
@@ -288,6 +312,10 @@ class Importer
     {
         $goals = [];
 
+        if (!array_key_exists('Varti', $team['raw']) || !is_array($team['raw']['Varti'])) {
+            return $goals;
+        }
+
         $preGoals = $team['raw']['Varti']['VG'];
 
         if (array_key_exists('Laiks', $preGoals)) {
@@ -325,6 +353,10 @@ class Importer
     protected function getPassData($goal, $teamPlayers)
     {
         $passes = [];
+
+        if (!array_key_exists('P', $goal['raw'])) {
+            return $passes;
+        }
 
         $prePasses = $goal['raw']['P'];
         if (array_key_exists('Nr', $prePasses)) {
@@ -429,5 +461,21 @@ class Importer
 
         return str_pad($minutes, 2, "0", STR_PAD_LEFT) . ":"
             . str_pad($seconds, 2, "0", STR_PAD_LEFT);
+    }
+
+    /**
+     * Returns player id from db
+     * @param $playerNr
+     * @param $teamPlayers
+     * @return mixed
+     */
+    private function getPlayerId($playerNr, $teamPlayers)
+    {
+        $player = array_filter($teamPlayers, function ($player) use ($playerNr) {
+            return $player['data']['nr']  == $playerNr;
+        });
+        $player = array_pop($player);
+
+        return $player['id'];
     }
 }

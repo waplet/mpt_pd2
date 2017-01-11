@@ -25,6 +25,7 @@ class Spele
         $where = [
             'laiks' => $game['laiks'],
             'vieta' => $game['vieta'],
+            'vecakais_tiesnesis_key' => $game['vecakais_tiesnesis_key'],
         ];
 
         if ($model->where($where)->exists()) {

@@ -144,3 +144,7 @@ CREATE TABLE `pamatsastavs` (
   ENGINE=InnoDB
 ;
 
+ALTER TABLE `spele`
+  DROP INDEX `laiks_vieta`,
+  ADD UNIQUE INDEX `laiks_vieta` (`laiks`, `vieta`, `vecakais_tiesnesis_key`);
+
