@@ -10,4 +10,4 @@ $file = 'JSON_TestData/JSONFirstRound/futbols2.json';
 $loader = new \BigF\Managers\Loaders\JsonLoader($file);
 $importer = new \BigF\Managers\Importer($loader->load());
 
-echo "Worked";
+// echo "Worked";
