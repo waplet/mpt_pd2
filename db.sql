@@ -148,3 +148,8 @@ ALTER TABLE `spele`
   DROP INDEX `laiks_vieta`,
   ADD UNIQUE INDEX `laiks_vieta` (`laiks`, `vieta`, `vecakais_tiesnesis_key`);
 
+
+ALTER TABLE `spele`
+  DROP INDEX `laiks_vieta`,
+  ADD UNIQUE INDEX `laiks_vieta` (`laiks`, `vieta`, `vecakais_tiesnesis_key`, `komanda1_key`, `komanda2_key`);
+

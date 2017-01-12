@@ -26,6 +26,8 @@ class Spele
             'laiks' => $game['laiks'],
             'vieta' => $game['vieta'],
             'vecakais_tiesnesis_key' => $game['vecakais_tiesnesis_key'],
+            'komanda1_key' => $game['komanda1_key'],
+            'komanda2_key' => $game['komanda2_key'],
         ];
 
         if ($model->where($where)->exists()) {
