@@ -4,3 +4,4 @@ composer.phar
 .idea/
 
 /tmp/*
+/load_dir/*

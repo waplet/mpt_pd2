@@ -13,29 +13,38 @@ function decode($data) {
 }
 
 if (!empty($_POST)) {
-
-    // Check if text
-    $possibleJson = "";
-    if (!empty($_POST['textarea_json'])) {
-        $possibleJson = $_POST['textarea_json'];
-    } else if (!empty($_FILES['upload_json'])) {
-        $possibleJson = file_get_contents($_FILES['upload_json']['tmp_name']);
-    }
-
-    if (empty($possibleJson)) {
-        // No data received
-    } else {
-        $decoded = decode($possibleJson);
-
-        if ($decoded) {
-            new \BigF\Managers\Importer($decoded);
-            header('Location: /import.php?imported=1');
-            exit;
+    if (isset($_POST['load_json'])) {
+        $files = glob(__DIR__ . "../load_dir/*.json");
+        foreach ($files as $file) {
+            $loader = new \BigF\Managers\Loaders\JsonLoader($file);
+            new \BigF\Managers\Importer($loader->load());
         }
 
-        header('Location: /import.php?imported=0');
-        exit;
+        header('Location: /import.php?imported=1');
+    } else {
+        // Check if text
+        $possibleJson = "";
+        if (!empty($_POST['textarea_json'])) {
+            $possibleJson = $_POST['textarea_json'];
+        } else if (!empty($_FILES['upload_json'])) {
+            $possibleJson = file_get_contents($_FILES['upload_json']['tmp_name']);
+        }
 
+        if (empty($possibleJson)) {
+            // No data received
+        } else {
+            $decoded = decode($possibleJson);
+
+            if ($decoded) {
+                new \BigF\Managers\Importer($decoded);
+                header('Location: /import.php?imported=1');
+                exit;
+            }
+
+            header('Location: /import.php?imported=0');
+            exit;
+
+        }
     }
 }
 
@@ -65,6 +74,10 @@ include "header.php";
             <div class="form-group">
                 <label for="upload_json">JSON file uploader</label>
                 <input type="file" name="upload_json"/>
+            </div>
+            <div class="form-group">
+                <label for="load_json">JSON from dir (./load_dir/*.json)</label>
+                <input type="checkbox" name="load_json" class="checkbox" value="1"/>
             </div>
             <div class="form-group">
                 <input type="submit" class="btn btn-success" value="Process"/>
