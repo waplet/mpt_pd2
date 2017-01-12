@@ -13,7 +13,7 @@ abstract class LoaderAbstract
 
     /**
      * @param null $path
-     * @return JsonLoader
+     * @return $this
      */
     public function setPath($path)
     {

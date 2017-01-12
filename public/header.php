@@ -38,6 +38,9 @@
                 <li><a href="/mostAggressive.php">Rupjākie spēlētāji</a></li>
                 <li><a href="/toughReferees.php">Bargākie tiesneši</a></li>
             </ul>
+            <div class="navbar-right">
+                <a href="/import.php" class="btn btn-primary navbar-btn">Import</a>
+            </div>
         </div><!--/.navbar-collapse -->
     </div>
 </nav>

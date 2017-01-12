@@ -26,7 +26,7 @@ include "header.php";
                             <td><?=($position+1)?></td>
                             <td><?=$row['vards'];?></td>
                             <td><?=$row['uzvards'];?></td>
-                            <td><?=$row['Fouls per match'];?></td>
+                            <td><?=number_format($row['Fouls per match'], 1);?></td>
                         </tr>
                     <?php } ?>
                 </table>
