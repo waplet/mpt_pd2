@@ -5,6 +5,7 @@ namespace BigF\Managers;
 use BigF\Models\Komanda;
 use BigF\Models\Spele;
 use BigF\Models\Speletajs;
+use BigF\Models\Tiesnesis;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Database\Query\JoinClause;
 
@@ -120,4 +121,39 @@ class Report
             ->toArray();
     }
 
+    public static function mostAggressive()
+    {
+        $model = Speletajs::prepare();
+
+        return $model->select([
+                'speletajs.vards',
+                'speletajs.uzvards',
+                'k.nosaukums'
+            ])
+            ->selectRaw('count(so.id) \'Fouls\'')
+            ->leftJoin('sods as so', 'so.speletajs_key', '=', 'speletajs.id')
+            ->leftJoin('komanda as k', 'k.id', '=', 'speletajs.komanda_key')
+            ->groupBy('speletajs.id')
+            ->orderBy(Manager::raw('`Fouls`'), 'DESC')
+            ->having(Manager::raw('`Fouls`'), '>', '0')
+            ->get()
+            ->toArray();
+    }
+
+    public static function toughReferees()
+    {
+        $model = Tiesnesis::prepare();
+
+        return $model->select([
+                'tiesnesis.vards',
+                'tiesnesis.uzvards'
+            ])
+            ->selectRaw('count(distinct s.id), count(distinct so.id) * 1.0 / count(distinct s.id) \'Fouls per match\'')
+            ->join('spele as s', 's.vecakais_tiesnesis_key', '=', 'tiesnesis.id')
+            ->join('sods as so', 'so.spele_key', '=', 's.id')
+            ->groupBy('tiesnesis.id')
+            ->orderBy(Manager::raw('`Fouls per match`'), 'DESC')
+            ->get()
+            ->toArray();
+    }
 }

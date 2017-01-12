@@ -35,6 +35,8 @@
             <ul class="nav navbar-nav">
                 <li><a href="/index.php">Turnīra tabula</a></li>
                 <li><a href="/top10Best.php">10 rezultatīvākie</a></li>
+                <li><a href="/mostAggressive.php">Rupjākie spēlētāji</a></li>
+                <li><a href="/toughReferees.php">Bargākie tiesneši</a></li>
             </ul>
         </div><!--/.navbar-collapse -->
     </div>

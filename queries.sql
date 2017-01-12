@@ -48,6 +48,7 @@ GROUP BY k.nosaukums
     ORDER BY `Points` DESC
     ;
 
+-- Rezultatīvākie spēlētāji
 SELECT
     count(v.id) 'Goals'
     , count(p.id) 'Passes'
@@ -62,3 +63,20 @@ GROUP BY s.id
 ORDER BY `Goals` DESC, `Passes` DESC
 LIMIT 10
 ;
+
+-- Rupjākie spēlētāji
+SELECT
+    s.*
+    , count(so.id) 'Fouls'
+FROM speletajs s
+    LEFT JOIN sods so ON so.speletajs_key = s.id
+GROUP BY s.id
+ORDER BY `Fouls` DESC;
+
+-- Tiesneši
+
+SELECT t.*, count(distinct so.id), count(distinct s.id), count(distinct so.id) * 1.0 / count(distinct s.id) 'Fouls per match'  FROM tiesnesis t
+    INNER JOIN spele s ON s.vecakais_tiesnesis_key = t.id
+    INNER JOIN sods so ON so.spele_key = s.id
+    group by t.id
+    order by `Fouls per match` DESC
