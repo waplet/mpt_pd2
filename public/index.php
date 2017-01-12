@@ -17,32 +17,28 @@ include "header.php";
                     <tr>
                         <th>#</th>
                         <th>Komanda</th>
+                        <th>Punkti</th>
                         <th>Nospēlētas spēles</th>
-                        <th>Vārti</th>
-                        <th>Ielaisti vārti</th>
-                        <th>Uzvarētas spēles</th>
-                        <th>Zaudētas spēles</th>
+                        <th>Rezultāts</th>
                         <th>Uzvarētas spēles (Pamatlaikā)</th>
                         <th>Zaudētas spēles (Pamatlaikā)</th>
                         <th>Uzvarētas spēles (OT)</th>
                         <th>Zaudētas spēles (OT)</th>
-                        <th>Punkti</th>
+                        <th>Vārtu attiecība</th>
                     </tr>
                 </thead>
-                <?php foreach ($mainTable as $row) { ?>
+                <?php foreach ($mainTable as $position => $row) { ?>
                     <tr>
-                        <td>#</td>
+                        <td><?=($position+1)?></td>
                         <td><strong><?=$row['Team'];?></strong></td>
+                        <td><strong><?=$row['Points'];?></strong></td>
                         <td><?=$row['Games played'];?></td>
-                        <td><?=$row['Goals'];?></td>
-                        <td><?=$row['Goals lost'];?></td>
-                        <td><?=$row['Games won'];?></td>
-                        <td><?=$row['Games lost'];?></td>
+                        <td><?=$row['Games won'];?>:<?=$row['Games lost'];?></td>
                         <td><?=$row['Games won Main'];?></td>
                         <td><?=$row['Games lost Main'];?></td>
                         <td><?=$row['Games won OT'];?></td>
                         <td><?=$row['Games lost OT'];?></td>
-                        <td><strong><?=$row['Points'];?></strong></td>
+                        <td><?=$row['Goals'];?>:<?=$row['Goals lost'];?></td>
                     </tr>
                 <?php } ?>
             </table>

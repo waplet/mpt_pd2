@@ -46,4 +46,19 @@ FROM komanda k
     LEFT JOIN spele s4 ON s4.id = lost.GameID AND lost.Papildlaiks = 1
 GROUP BY k.nosaukums
     ORDER BY `Points` DESC
+    ;
+
+SELECT
+    count(v.id) 'Goals'
+    , count(p.id) 'Passes'
+    , s.uzvards
+    , s.vards
+    , k.nosaukums
+FROM speletajs s
+    LEFT JOIN varti v ON v.speletajs_key = s.id
+    LEFT JOIN piespele p ON p.speletajs_key = s.id
+    LEFT JOIN komanda k ON k.id = s.komanda_key
+GROUP BY s.id
+ORDER BY `Goals` DESC, `Passes` DESC
+LIMIT 10
 ;

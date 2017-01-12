@@ -33,8 +33,8 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Standings <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">Link</a></li>
+                <li><a href="/index.php">Turnīra tabula</a></li>
+                <li><a href="/top10Best.php">10 rezultatīvākie</a></li>
             </ul>
         </div><!--/.navbar-collapse -->
     </div>

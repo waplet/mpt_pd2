@@ -4,6 +4,7 @@ namespace BigF\Managers;
 
 use BigF\Models\Komanda;
 use BigF\Models\Spele;
+use BigF\Models\Speletajs;
 use Illuminate\Database\Capsule\Manager;
 use Illuminate\Database\Query\JoinClause;
 
@@ -92,6 +93,31 @@ class Report
             // ->toSql()
             ->get()->toArray()
         ;
+    }
+
+    public static function top10Best()
+    {
+        $model = Speletajs::prepare();
+
+        return $model->select([
+                'speletajs.uzvards',
+                'speletajs.vards',
+                'k.nosaukums'
+            ])
+            ->selectRaw('count(v.id) \'Goals\'')
+            ->selectRaw('count(p.id) \'Passes\'')
+            ->leftJoin('varti as v', 'v.speletajs_key', '=', 'speletajs.id')
+            ->leftJoin('piespele as p', 'p.speletajs_key', '=', 'speletajs.id')
+            ->leftJoin('komanda as k', 'k.id', '=', 'speletajs.komanda_key')
+            ->groupBy('speletajs.id')
+            ->orderBy(Manager::raw('`Goals`'), 'DESC')
+            ->orderBy(Manager::raw('`Passes`'), 'DESC')
+            // Additional so that they does not change
+            ->orderBy('speletajs.vards', 'ASC')
+            ->orderBy('speletajs.uzvards', 'ASC')
+            ->limit(10)
+            ->get()
+            ->toArray();
     }
 
 }
